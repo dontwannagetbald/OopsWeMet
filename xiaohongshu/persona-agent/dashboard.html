@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rednote Encounter Monitor</title>
+  <style>
+    :root {
+      --bg: #f3eadb;
+      --panel: #fffaf0;
+      --ink: #1d1a16;
+      --muted: #776b5d;
+      --line: #d8c7ae;
+      --red: #d9412f;
+      --green: #257a4a;
+      --gold: #d89a2b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(217, 65, 47, .18), transparent 28%),
+        linear-gradient(135deg, #f8f0de, var(--bg));
+      color: var(--ink);
+      font-family: "Avenir Next", "PingFang SC", sans-serif;
+    }
+    aside {
+      padding: 24px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 250, 240, .72);
+      backdrop-filter: blur(12px);
+    }
+    main { padding: 28px; min-width: 0; }
+    h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: -.04em; }
+    h2 { margin: 0; color: var(--muted); font-size: 13px; font-weight: 500; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .55);
+      white-space: nowrap;
+    }
+    .online { color: var(--green); border-color: rgba(37, 122, 74, .3); }
+    .offline { color: var(--red); border-color: rgba(217, 65, 47, .3); }
+    .empty { color: var(--muted); font-size: 14px; margin: 20px 0; }
+    .device-list { display: grid; gap: 12px; margin-top: 18px; }
+    .device {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255, 250, 240, .8);
+      box-shadow: 0 14px 40px rgba(76, 47, 18, .08);
+    }
+    .device-top { display: flex; justify-content: space-between; gap: 10px; }
+    .name { font-weight: 800; font-size: 18px; }
+    .id, .meta { color: var(--muted); font-size: 12px; }
+    .meter {
+      margin-top: 12px;
+      height: 7px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #eadbc3;
+    }
+    .meter span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--gold), var(--red));
+    }
+    .stream {
+      height: calc(100vh - 120px);
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 4px;
+    }
+    .event, .bubble {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 14px 16px;
+      background: rgba(255, 250, 240, .76);
+      box-shadow: 0 18px 50px rgba(76, 47, 18, .08);
+    }
+    .event { color: var(--muted); }
+    .bubble {
+      max-width: 760px;
+      font-size: 18px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+    .bubble.zhang_zong { align-self: flex-start; border-left: 6px solid #2b2b2b; }
+    .bubble.xiao_hong { align-self: flex-end; border-right: 6px solid var(--red); }
+    .who {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    @media (max-width: 760px) {
+      body { grid-template-columns: 1fr; }
+      aside { border-right: 0; border-bottom: 1px solid var(--line); }
+      header { align-items: flex-start; flex-direction: column; }
+      .stream { height: auto; min-height: 55vh; }
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <h1>Rednote Monitor</h1>
+    <h2>WebSocket 板子、对话和动画事件</h2>
+    <div id="wsStatus" class="pill offline" style="margin-top:18px">WebSocket 未连接</div>
+    <div id="summary" class="empty">等待 duel 启动后推送状态。</div>
+    <section id="devices" class="device-list"></section>
+  </aside>
+  <main>
+    <header>
+      <div>
+        <h1>双人对话现场</h1>
+        <h2 id="lastSeen">暂无事件</h2>
+      </div>
+      <div class="pill" id="wsUrl"></div>
+    </header>
+    <section id="stream" class="stream">
+      <div class="event">页面已打开，正在等待 WebSocket 消息。</div>
+    </section>
+  </main>
+  <script>
+    const hostCandidates = [
+      location.hostname,
+      "172.20.10.9",
+      "127.0.0.1",
+    ].filter(Boolean);
+    let hostIndex = 0;
+    let wsUrl = `ws://${hostCandidates[hostIndex]}:8765`;
+    const devicesEl = document.querySelector("#devices");
+    const statusEl = document.querySelector("#wsStatus");
+    const streamEl = document.querySelector("#stream");
+    const summaryEl = document.querySelector("#summary");
+    const lastSeenEl = document.querySelector("#lastSeen");
+    const wsUrlEl = document.querySelector("#wsUrl");
+    wsUrlEl.textContent = wsUrl;
+    let peers = {};
+
+    function personaName(value) {
+      if (value === "xiao_hong") return "小红";
+      if (value === "zhang_zong") return "张总";
+      return value || "未知设备";
+    }
+    function stamp() {
+      return new Date().toLocaleTimeString("zh-CN", { hour12: false });
+    }
+    function setStatus(online, text) {
+      statusEl.className = `pill ${online ? "online" : "offline"}`;
+      statusEl.textContent = text;
+    }
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+    function addEvent(text) {
+      const div = document.createElement("div");
+      div.className = "event";
+      div.textContent = `${stamp()}  ${text}`;
+      streamEl.appendChild(div);
+      streamEl.scrollTop = streamEl.scrollHeight;
+      lastSeenEl.textContent = text;
+    }
+    function addReply(persona, text) {
+      const div = document.createElement("article");
+      div.className = `bubble ${persona || ""}`;
+      div.innerHTML = `<div class="who">${personaName(persona)}</div>${escapeHtml(text || "")}`;
+      streamEl.appendChild(div);
+      streamEl.scrollTop = streamEl.scrollHeight;
+      lastSeenEl.textContent = `${personaName(persona)} 说话了`;
+    }
+    function renderPeers() {
+      const list = Object.values(peers);
+      summaryEl.textContent = list.length ? `当前 ${list.length} 台 WS 设备在线` : "还没有 WS 板子上线。";
+      devicesEl.innerHTML = list.map((p) => `
+        <article class="device">
+          <div class="device-top">
+            <div>
+              <div class="name">${personaName(p.persona)}</div>
+              <div class="id">${p.id || ""}</div>
+            </div>
+            <div class="pill online">${p.state || "online"}</div>
+          </div>
+          <div class="meta">${p.name || "M5Stack CoreS3"}</div>
+          <div class="meter"><span style="width:82%"></span></div>
+        </article>
+      `).join("");
+    }
+    function connect() {
+      let ws;
+      wsUrl = `ws://${hostCandidates[hostIndex]}:8765`;
+      wsUrlEl.textContent = wsUrl;
+      try {
+        ws = new WebSocket(wsUrl);
+      } catch {
+        setStatus(false, "浏览器无法创建 WebSocket");
+        return;
+      }
+      ws.onopen = () => {
+        setStatus(true, "WebSocket 已连接");
+        ws.send("DASHBOARD|hello");
+        addEvent("已连接到 duel WebSocket");
+      };
+      ws.onclose = () => {
+        hostIndex = (hostIndex + 1) % hostCandidates.length;
+        setStatus(false, "连接断开，3 秒后重连");
+        setTimeout(connect, 3000);
+      };
+      ws.onerror = () => setStatus(false, "WebSocket 出错");
+      ws.onmessage = (event) => {
+        let msg;
+        try { msg = JSON.parse(event.data); } catch { return; }
+        if (msg.type === "status" && Array.isArray(msg.peers)) {
+          peers = {};
+          msg.peers.forEach((peer) => { peers[peer.id] = peer; });
+          renderPeers();
+          return;
+        }
+        if (msg.type === "encounter") {
+          addEvent(`开始相遇：${personaName(msg.a_persona)} 和 ${personaName(msg.b_persona)}，模式 ${msg.mode}`);
+          return;
+        }
+        if (msg.type === "stage") {
+          addEvent(`动画阶段：${msg.state} → ${msg.next_state || "none"}，${msg.text || ""}`);
+          return;
+        }
+        if (msg.type === "reply") {
+          addReply(msg.persona, msg.text);
+          return;
+        }
+        if (msg.type === "leave") {
+          addEvent(`对话结束：${msg.reason || "unknown"}`);
+        }
+      };
+    }
+    renderPeers();
+    connect();
+  </script>
+</body>
+</html>
