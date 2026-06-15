@@ -1,0 +1,47 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter (debug)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "Flutter Web — iPhone 15 尺寸",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "args": [
+        "--web-browser-flag=--window-size=393,852",
+        "--web-browser-flag=--window-position=80,40"
+      ]
+    },
+    {
+      "name": "Flutter Web — iPhone 15 Pro Max 尺寸",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "args": [
+        "--web-browser-flag=--window-size=430,932",
+        "--web-browser-flag=--window-position=80,40"
+      ]
+    },
+    {
+      "name": "Flutter (profile)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Flutter (release)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "release"
+    }
+  ]
+}

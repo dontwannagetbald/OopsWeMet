@@ -1,0 +1,28 @@
+{
+  "output": "/Users/root1/workspace/xiaohongshu/outputs/manual-20260614-techroute/presentations/project-tech-route/output/小红书项目技术路线.pptx",
+  "outputBytes": 14999,
+  "slideCount": 1,
+  "slideSize": {
+    "width": 1280,
+    "height": 720
+  },
+  "previewDir": "/Users/root1/workspace/xiaohongshu/outputs/manual-20260614-techroute/presentations/project-tech-route/preview",
+  "previewPaths": [
+    "/Users/root1/workspace/xiaohongshu/outputs/manual-20260614-techroute/presentations/project-tech-route/preview/slide-01.png"
+  ],
+  "layoutDir": "/Users/root1/workspace/xiaohongshu/outputs/manual-20260614-techroute/presentations/project-tech-route/layout",
+  "layoutResults": [
+    {
+      "layoutPath": "/Users/root1/workspace/xiaohongshu/outputs/manual-20260614-techroute/presentations/project-tech-route/layout/slide-01.layout.json"
+    }
+  ],
+  "contactSheet": "/Users/root1/workspace/xiaohongshu/outputs/manual-20260614-techroute/presentations/project-tech-route/output/contact-sheet.png",
+  "slides": [
+    {
+      "index": 1,
+      "requestedSlideNumber": 1,
+      "modulePath": "/Users/root1/workspace/xiaohongshu/outputs/manual-20260614-techroute/presentations/project-tech-route/slides/slide-01.mjs",
+      "exportName": "slide01"
+    }
+  ]
+}

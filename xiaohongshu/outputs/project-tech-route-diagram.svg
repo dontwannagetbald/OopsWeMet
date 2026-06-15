@@ -1,0 +1,114 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FCF5EA"/>
+      <stop offset="1" stop-color="#F7EBDD"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#EB5B38"/>
+      <stop offset="1" stop-color="#C93C1D"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#7C5834" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .title { font: 700 44px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #fff; }
+      .subtitle { font: 500 22px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #7F5C39; }
+      .sectionTitle { font: 700 28px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #2A221B; }
+      .sectionBody { font: 500 19px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #5E4B38; }
+      .tag { font: 600 17px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #7B5B3B; }
+      .sumTitle { font: 700 26px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #fff; }
+      .sumBody { font: 500 20px 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #FCEEE6; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1350" cy="120" r="220" fill="#F6D8C4" opacity="0.35"/>
+  <circle cx="180" cy="760" r="180" fill="#F2DEC8" opacity="0.45"/>
+
+  <rect x="90" y="70" width="520" height="94" rx="28" fill="url(#titleGrad)" filter="url(#shadow)"/>
+  <text x="126" y="128" class="title">项目技术路线</text>
+  <text x="92" y="210" class="subtitle">基于代码实现梳理：AI 人格驱动、多入口交互、语音与硬件联动闭环</text>
+
+  <g filter="url(#shadow)">
+    <rect x="90" y="300" width="250" height="270" rx="28" fill="#FFF9F0"/>
+    <rect x="374" y="300" width="250" height="270" rx="28" fill="#FFF9F0"/>
+    <rect x="658" y="280" width="284" height="310" rx="32" fill="#2E2924"/>
+    <rect x="976" y="300" width="250" height="270" rx="28" fill="#FFF9F0"/>
+    <rect x="1260" y="300" width="250" height="270" rx="28" fill="#FFF9F0"/>
+  </g>
+
+  <path d="M340 435 C356 435, 360 435, 374 435" stroke="#CB8E56" stroke-width="5" stroke-linecap="round"/>
+  <path d="M624 435 C640 435, 644 435, 658 435" stroke="#CB8E56" stroke-width="5" stroke-linecap="round"/>
+  <path d="M942 435 C958 435, 962 435, 976 435" stroke="#CB8E56" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1226 435 C1242 435, 1246 435, 1260 435" stroke="#CB8E56" stroke-width="5" stroke-linecap="round"/>
+
+  <polygon points="374,435 357,425 357,445" fill="#CB8E56"/>
+  <polygon points="658,435 641,425 641,445" fill="#CB8E56"/>
+  <polygon points="976,435 959,425 959,445" fill="#CB8E56"/>
+  <polygon points="1260,435 1243,425 1243,445" fill="#CB8E56"/>
+
+  <g>
+    <rect x="118" y="326" width="124" height="36" rx="18" fill="#F9E6D4"/>
+    <text x="142" y="350" class="tag">01 人设层</text>
+    <text x="118" y="402" class="sectionTitle">可插拔人格配置</text>
+    <text x="118" y="448" class="sectionBody">• skills/&lt;persona_id&gt;</text>
+    <text x="118" y="482" class="sectionBody">• meta.json / SKILL.md</text>
+    <text x="118" y="516" class="sectionBody">• assets/*.md 人设素材</text>
+    <text x="118" y="560" class="sectionBody">作用：把角色设定从代码中解耦，</text>
+    <text x="118" y="590" class="sectionBody">支持按 persona_id 动态装配</text>
+  </g>
+
+  <g>
+    <rect x="402" y="326" width="138" height="36" rx="18" fill="#F9E6D4"/>
+    <text x="425" y="350" class="tag">02 组装层</text>
+    <text x="402" y="402" class="sectionTitle">Prompt 与注册管理</text>
+    <text x="402" y="448" class="sectionBody">• PersonaRegistry 动态注册</text>
+    <text x="402" y="482" class="sectionBody">• build_persona_prompt 聚合</text>
+    <text x="402" y="516" class="sectionBody">• Markdown 文件拼接为系统提示词</text>
+    <text x="402" y="560" class="sectionBody">作用：把“人设文件”转化为</text>
+    <text x="402" y="590" class="sectionBody">可调用的 Agent 配置</text>
+  </g>
+
+  <g>
+    <rect x="692" y="314" width="150" height="40" rx="20" fill="#FFE0B8"/>
+    <text x="719" y="340" class="tag" fill="#6B3605">03 服务核心</text>
+    <text x="692" y="402" class="sectionTitle" fill="#FFF4E9">Persona Agent 服务</text>
+    <text x="692" y="448" class="sectionBody" fill="#E8D8C7">• PersonaAgent 调 OpenAI 接口</text>
+    <text x="692" y="482" class="sectionBody" fill="#E8D8C7">• AgentPool 按 persona_id 缓存</text>
+    <text x="692" y="516" class="sectionBody" fill="#E8D8C7">• SessionStore 管理多轮记忆</text>
+    <text x="692" y="560" class="sectionBody" fill="#E8D8C7">对外入口：</text>
+    <text x="692" y="594" class="sectionBody" fill="#E8D8C7">FastAPI / CLI / Bridge / Duel / Encounter</text>
+  </g>
+
+  <g>
+    <rect x="1004" y="326" width="138" height="36" rx="18" fill="#F9E6D4"/>
+    <text x="1028" y="350" class="tag">04 编排层</text>
+    <text x="1004" y="402" class="sectionTitle">输出与多模态编排</text>
+    <text x="1004" y="448" class="sectionBody">• 文本回复生成</text>
+    <text x="1004" y="482" class="sectionBody">• pick_animation_state 情绪映射</text>
+    <text x="1004" y="516" class="sectionBody">• TXT 协议下发屏幕文案</text>
+    <text x="1004" y="550" class="sectionBody">• pypinyin + wav 音库语音合成</text>
+    <text x="1004" y="590" class="sectionBody">作用：把 LLM 文本转成</text>
+    <text x="1004" y="620" class="sectionBody">屏幕、音频、状态三种输出</text>
+  </g>
+
+  <g>
+    <rect x="1288" y="326" width="138" height="36" rx="18" fill="#F9E6D4"/>
+    <text x="1312" y="350" class="tag">05 终端层</text>
+    <text x="1288" y="402" class="sectionTitle">硬件与场景承载</text>
+    <text x="1288" y="448" class="sectionBody">• M5Stack / Arduino 固件</text>
+    <text x="1288" y="482" class="sectionBody">• 动画、Duel、Coffee 场景</text>
+    <text x="1288" y="516" class="sectionBody">• 串口 PCM / WebSocket 音频</text>
+    <text x="1288" y="550" class="sectionBody">• BLE Encounter / NFC 触发</text>
+    <text x="1288" y="590" class="sectionBody">作用：把对话能力落到真实</text>
+    <text x="1288" y="620" class="sectionBody">设备互动与线下体验场景</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="150" y="690" width="1300" height="120" rx="28" fill="#2F2925"/>
+  </g>
+  <text x="190" y="748" class="sumTitle">一句话总结</text>
+  <text x="190" y="792" class="sumBody">项目以“人设文件驱动的 Persona Agent”为核心，中间通过 HTTP / CLI / 串口 / WebSocket 提供多入口交互，</text>
+  <text x="190" y="824" class="sumBody">下游再打通语音合成、屏幕动画与 M5 硬件场景，形成完整的数字人格交互闭环。</text>
+</svg>

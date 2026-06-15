@@ -1,0 +1,8 @@
+{
+  "dart.flutterSdkPath": "/Users/root1/development/flutter",
+  "editor.formatOnSave": true,
+  "[dart]": {
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.tabSize": 2
+  }
+}
